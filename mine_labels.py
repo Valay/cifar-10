@@ -1,6 +1,8 @@
 # This script is used to conver the labels to integer values so that it can be used by any classifier
 
-fp = open('../trainLablesIntegers.csv','a')
+# fp = open('../trainLablesIntegers.csv','a')
+
+import json
 
 Label_dict = {
     'horse' : 1,
@@ -14,6 +16,19 @@ Label_dict = {
     'airplane' : 9,
     'dog' : 10
 }
+
+Label_rev = {}
+
+for key in Label_dict.keys():
+    Label_rev[Label_dict[key]] = key
+    
+print Label_dict
+print Label_rev
+
+with open('LablesToInts.json','w') as f:    
+    json.dump(Label_dict,f)
+with open('IntsToLables.json','w') as f: 
+    json.dump(Label_rev,f) 
 
 with open('../trainLabels.csv') as f:
     for line in f:
