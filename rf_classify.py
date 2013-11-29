@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 import cv2
 import json
+import pickle
 
 # Define a variables to store training image data and the training labels
 
@@ -16,14 +17,20 @@ with open('LabelsToInts.json','r') as f:
 # Load an test the model on the the test set
 #num_test_examples = 3000
 
-with open('../testSubmission.csv','a') as f:
+# get the model
+with open('model.pkl','rb') as f:
+     clf = pickle.load(f)
+print "Model Loaded!"
+     
+     
+with open('../testSubmission.csv','w') as f:
     f.write('id'+','+'Label\n')
 
 num_examples = 500   # images in one test_data_i file
 
-count = 0
+count = 1
 print "Loading Test Data"
-for i in range(1:301):
+for i in range(1,601):
     filename = '../test_data/test_data_'+str(i)+'.npy'
     test_data_X = np.load(filename)  # load the data from file train_data.npy
     #test_data_X = np.vstack((test_data_X,data))

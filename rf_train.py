@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 import cv2
 import json
+import pickle
 
 # Define a variables to store training image data and the training labels
 train_data_X = np.zeros((1,3072))
@@ -17,7 +18,7 @@ with open('LabelsToInts.json','r') as f:
 
 # Load the training data
 print "Loading Train images!"
-for i in range(1:51):
+for i in range(1,51):
     filename = '../train_data/train_data_'+str(i)+'.npy'
     data = np.load(filename)  # load the data from file train_data.npy
     train_data_X = np.vstack((train_data_X,data))
@@ -45,10 +46,15 @@ print "Train labels loaded! \n"
 print "Training Model"
 # Train the classifier
 clf = RandomForestClassifier(n_jobs=2)
-clf.fit(train_data_X[1:40000,:], y[:40000])    # Change this!
+clf.fit(train_data_X[1:,:], y)    # Change this!
 # del train_data_X
 # del y
-print "Model trained\n"
+
+# save the model
+with open('model.pkl','w') as f:
+    pickle.dump(clf,f)
+print "Model trained and saved\n"
+
 
 print "Testing model on train data!"
 # Testing on train set
@@ -62,5 +68,5 @@ for i in range(10000):
     #print ytrain[i], y[i+40000]
 
 print count            
-print 'train_error is %d' % float(count)/10000
+# print 'train_error is %d' % (float(count)/10000)
 # Finish this function
