@@ -5,7 +5,8 @@ import json
 import pickle
 
 # Define a variables to store training image data and the training labels
-train_data_X = np.zeros((1,3072))
+dim = 3072
+train_data_X = np.zeros((1,dim))
 num_examples = 50000
 y = np.zeros((num_examples),dtype='uint8')
 
@@ -18,7 +19,7 @@ with open('LabelsToInts.json','r') as f:
 
 # Load the training data
 print "Loading Train images!"
-for i in range(1,51):
+for i in range(1,101):
     filename = '../train_data/train_data_'+str(i)+'.npy'
     data = np.load(filename)  # load the data from file train_data.npy
     train_data_X = np.vstack((train_data_X,data))
@@ -45,7 +46,7 @@ print "Train labels loaded! \n"
 
 print "Training Model"
 # Train the classifier
-clf = RandomForestClassifier(n_jobs=2)
+clf = RandomForestClassifier(n_jobs=5,n_estimators=100)
 clf.fit(train_data_X[1:,:], y)    # Change this!
 # del train_data_X
 # del y
@@ -58,12 +59,13 @@ print "Model trained and saved\n"
 
 print "Testing model on train data!"
 # Testing on train set
-ytrain = clf.predict(train_data_X[40001:,:])
+ytrain = clf.predict(train_data_X[1:,:])
 
 print ytrain.shape, train_data_X.shape, y.shape
 count = 0
-for i in range(10000):
-    if ytrain[i] != y[i+40000]:
+
+for i in range(50000):
+    if ytrain[i] != y[i]:
         count = count+1
     #print ytrain[i], y[i+40000]
 
